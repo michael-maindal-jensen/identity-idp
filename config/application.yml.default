@@ -102,6 +102,7 @@ remember_device_expiration_hours_aal_2: '12'
 report_timeout:
 requests_per_ip_track_only_mode: 'false'
 saml_secret_rotation_enabled:
+service_provider_request_ttl_hours: '24'
 session_check_delay: '30'
 session_check_frequency: '30'
 session_timeout_in_minutes: '15'
@@ -120,7 +121,7 @@ unauthorized_scope_enabled: 'false'
 usps_download_sftp_timeout: '5'
 usps_upload_enabled: 'false'
 usps_upload_sftp_timeout: '5'
-valid_authn_contexts: '["http://idmanagement.gov/ns/assurance/loa/1", "http://idmanagement.gov/ns/assurance/loa/3", "http://idmanagement.gov/ns/assurance/ial/1", "http://idmanagement.gov/ns/assurance/ial/2"]'
+valid_authn_contexts: '["http://idmanagement.gov/ns/assurance/loa/1", "http://idmanagement.gov/ns/assurance/loa/3", "http://idmanagement.gov/ns/assurance/ial/1", "http://idmanagement.gov/ns/assurance/ial/2", "http://idmanagement.gov/ns/assurance/ial/0"]'
 
 development:
   aamva_private_key: 123abc

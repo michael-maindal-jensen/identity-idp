@@ -25,17 +25,22 @@ class StoreSpMetadataInSession
   end
 
   def sp_request
-    @sp_request ||= ServiceProviderRequest.from_uuid(request_id)
+    @sp_request ||= ServiceProviderRequestProxy.from_uuid(request_id)
   end
 
   def update_session
     session[:sp] = {
       issuer: sp_request.issuer,
       ial2: ial2_requested?,
+      ialmax: ialmax_requested?,
       request_url: sp_request.url,
       request_id: sp_request.uuid,
       requested_attributes: sp_request.requested_attributes,
     }
+  end
+
+  def ialmax_requested?
+    Saml::Idp::Constants::IALMAX_AUTHN_CONTEXT_CLASSREF == sp_request.ial
   end
 
   def ial2_requested?

@@ -1,5 +1,7 @@
 module Idv
   class CacController < ApplicationController
+    include PivCacConcern
+
     before_action :render_404_if_disabled
     before_action :confirm_two_factor_authenticated
     before_action :cac_callback
@@ -13,6 +15,14 @@ module Idv
       analytics_id: Analytics::CAC_PROOFING,
     }.freeze
 
+    def redirect_to_piv_cac_service
+      create_piv_cac_nonce
+      redirect_to PivCacService.piv_cac_service_link(
+        nonce: piv_cac_nonce,
+        redirect_uri: idv_cac_step_url(:present_cac),
+      )
+    end
+
     private
 
     def render_404_if_disabled
@@ -23,7 +33,7 @@ module Idv
       token = params[:token]
       return unless request.path == idv_cac_step_path(:present_cac) && token
       data = PivCacService.decode_token(token)
-      cn_array = PivCac::CnFieldsFromSubject.call(data['dn'])
+      cn_array = PivCac::CnFieldsFromSubject.call(data['subject'])
       if cn_array.size > 2 && data['card_type'] == 'cac'
         process_cac_success(cn_array)
       else
