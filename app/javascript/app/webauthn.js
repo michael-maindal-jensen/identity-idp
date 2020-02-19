@@ -71,6 +71,7 @@ const enrollWebauthnDevice = ({ userId, userEmail, userChallenge, excludeCredent
       attestation: 'none',
       excludeList: [],
       excludeCredentials: extractCredentials(excludeCredentials),
+      userVerification: 'discouraged',
     },
   };
 
