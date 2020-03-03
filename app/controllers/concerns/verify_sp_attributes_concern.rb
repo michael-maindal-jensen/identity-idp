@@ -40,6 +40,11 @@ module VerifySPAttributesConcern
     user_session[:verify_shared_attributes] = false
   end
 
+  def consent_has_expired?
+    last_estimated_consent = sp_session_identity.last_consented_at || sp_session_identity.created_at
+    !last_estimated_consent || last_estimated_consent < Identity::CONSENT_EXPIRATION.ago
+  end
+
   private
 
   def sp_session_identity
@@ -55,12 +60,5 @@ module VerifySPAttributesConcern
 
   def sp_session_ial
     sp_session[:ial2] ? 2 : 1
-  end
-
-  def consent_has_expired?
-    if FeatureManagement.enforce_consented_at_expiration?
-      sp_session_identity.last_consented_at.nil? ||
-        Identity::CONSENT_EXPIRATION.ago < sp_session_identity.last_consented_at
-    end
   end
 end

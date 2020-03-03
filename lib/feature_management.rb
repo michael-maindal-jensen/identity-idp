@@ -123,8 +123,4 @@ class FeatureManagement
     # it controls if we hop over to identity-pki on a developers local machins
     Rails.env.development? && Figaro.env.identity_pki_local_dev == 'true'
   end
-
-  def self.enforce_consented_at_expiration?
-    Figaro.env.enforce_consented_at_expiration == 'true'
-  end
 end
