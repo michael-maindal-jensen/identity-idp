@@ -54,7 +54,8 @@ class IdentityLinker
     nonce: nil,
     rails_session_id: nil,
     scope: nil,
-    verified_attributes: nil
+    verified_attributes: nil,
+    last_consented_at: nil
   )
     {
       code_challenge: code_challenge,
@@ -63,7 +64,9 @@ class IdentityLinker
       rails_session_id: rails_session_id,
       scope: scope,
       verified_attributes: merge_attributes(verified_attributes),
-    }
+    }.tap do |hash|
+      hash[:last_consented_at] = last_consented_at if last_consented_at
+    end
   end
 
   def merge_attributes(verified_attributes)

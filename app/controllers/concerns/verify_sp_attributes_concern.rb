@@ -1,6 +1,9 @@
 module VerifySPAttributesConcern
   def needs_completions_screen?
-    sp_session[:issuer].present? && (sp_session_identity.nil? || !requested_attributes_verified?)
+    sp_session[:issuer].present? &&
+      (sp_session_identity.nil? ||
+        !requested_attributes_verified? ||
+        consent_has_expired?)
   end
 
   def needs_sp_attribute_verification?
@@ -20,6 +23,7 @@ module VerifySPAttributesConcern
     ).link_identity(
       ial: sp_session_ial,
       verified_attributes: sp_session[:requested_attributes],
+      last_consented_at: Time.zone.now,
     )
   end
 
@@ -51,5 +55,12 @@ module VerifySPAttributesConcern
 
   def sp_session_ial
     sp_session[:ial2] ? 2 : 1
+  end
+
+  def consent_has_expired?
+    if FeatureManagement.enforce_consented_at_expiration?
+      sp_session_identity.last_consented_at.nil? ||
+        Identity::CONSENT_EXPIRATION.ago < sp_session_identity.last_consented_at
+    end
   end
 end
