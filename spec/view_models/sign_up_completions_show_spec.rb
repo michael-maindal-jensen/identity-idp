@@ -15,7 +15,7 @@ describe SignUpCompletionsShow do
       decorated_session: decorated_session,
       handoff: handoff,
       ialmax_requested: false,
-      consent_has_expired: consent_has_expired?
+      consent_has_expired: consent_has_expired?,
     )
   end
 

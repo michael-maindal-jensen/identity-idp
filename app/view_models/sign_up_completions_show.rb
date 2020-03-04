@@ -3,7 +3,7 @@ class SignUpCompletionsShow
   include ActionView::Helpers::TagHelper
 
   def initialize(ial2_requested:, decorated_session:, current_user:, handoff:, ialmax_requested:,
-    consent_has_expired:)
+                 consent_has_expired:)
     @ial2_requested = ial2_requested
     @decorated_session = decorated_session
     @current_user = current_user
@@ -35,13 +35,7 @@ class SignUpCompletionsShow
 
   # rubocop:disable Rails/OutputSafety
   def heading
-    if handoff?
-      if consent_has_expired?
-        return content_tag(:strong, I18n.t('titles.sign_up.refresh_consent'))
-      else
-        return content_tag(:strong, I18n.t('titles.sign_up.new_sp'))
-      end
-    end
+    return handoff_heading if handoff?
 
     if requested_ial == 'ial2'
       return content_tag(:strong, I18n.t('titles.sign_up.verified', app: APP_NAME))
@@ -117,6 +111,14 @@ class SignUpCompletionsShow
   end
 
   private
+
+  def handoff_heading
+    if consent_has_expired?
+      content_tag(:strong, I18n.t('titles.sign_up.refresh_consent'))
+    else
+      content_tag(:strong, I18n.t('titles.sign_up.new_sp'))
+    end
+  end
 
   def handoff?
     @handoff

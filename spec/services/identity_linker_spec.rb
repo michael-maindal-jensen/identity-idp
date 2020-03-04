@@ -64,7 +64,6 @@ describe IdentityLinker do
         expect(last_identity.last_consented_at.to_i).to eq(six_months_ago.to_i)
       end
 
-
       it 'updates last_consented_at when present' do
         IdentityLinker.new(user, 'test.host').
           link_identity(last_consented_at: now)
